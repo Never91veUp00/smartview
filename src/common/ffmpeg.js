@@ -179,17 +179,20 @@ export const getAndStoreSnapshot = (
       '-s',
       `${videoWidth}x${videoHeight}`,
       '-frames:v',
-      '2',
-      '-r',
       '1',
-      '-update',
-      '1',
-      '-f',
-      'image2',
     ];
 
     if (videoConfig.videoFilter) {
       ffmpegArguments.push('-filter:v', videoConfig.videoFilter);
+    }
+
+    // выбор формата вывода
+    if (destination === '-') {
+      // вывод в stdout — потоковый формат MJPEG
+      ffmpegArguments.push('-f', 'mjpeg');
+    } else {
+      // запись в файл — формат image2 с обновлением
+      ffmpegArguments.push('-r', '1', '-update', '1', '-f', 'image2');
     }
 
     ffmpegArguments.push(destination);
