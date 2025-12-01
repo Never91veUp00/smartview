@@ -1,0 +1,176 @@
+{
+  "version": "1.1.17",
+  "firstStart": false,
+  "cameras": [
+    {
+      "name": "Tapo_C325WB_3599",
+      "motionTimeout": 15,
+      "recordOnMovement": null,
+      "prebuffering": null,
+      "videoConfig": {
+        "source": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
+        "stillImageSource": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
+        "stimeout": 0,
+        "audio": null,
+        "debug": null,
+        "subSource": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
+        "rtspTransport": "tcp",
+        "vcodec": "libx264",
+        "acodec": ""
+      },
+      "mqtt": {},
+      "smtp": {
+        "email": "Tapo_C325WB_3599"
+      },
+      "videoanalysis": {
+        "active": false
+      },
+      "prebufferLength": 4
+    }
+  ],
+  "notifications": [],
+  "users": [
+    {
+      "id": 1,
+      "username": "web",
+      "password": "d9wAAqiMXPiKp7VfSez7hA==$KU3sjREjCBJPrhfo7maLdWFiGynHCg3so57ZJO2REg3q5p4XAD3lyvo7vUUWmoXjlq6DHLXObdB7lCeNDMraPA==",
+      "sessionTimer": 14400,
+      "photo": "no_img.png",
+      "permissionLevel": [
+        "admin"
+      ]
+    }
+  ],
+  "settings": {
+    "aws": {
+      "active": false,
+      "accessKeyId": "",
+      "secretAccessKey": "",
+      "region": "",
+      "contingent_total": 5000,
+      "contingent_left": 5000,
+      "last_rekognition": ""
+    },
+    "cameras": [
+      {
+        "name": "Tapo_C325WB_3599",
+        "room": "Standard",
+        "resolution": "1280x720",
+        "pingTimeout": 1,
+        "streamTimeout": 60,
+        "audio": false,
+        "telegramType": "Snapshot",
+        "alexa": false,
+        "webhookUrl": "",
+        "mqttTopic": "camera.ui/motion",
+        "privacyMode": false,
+        "camview": {
+          "favourite": true,
+          "live": true,
+          "snapshotTimer": 60
+        },
+        "dashboard": {
+          "live": true,
+          "snapshotTimer": 60
+        },
+        "rekognition": {
+          "active": false,
+          "confidence": 90,
+          "labels": []
+        },
+        "videoanalysis": {
+          "forceCloseTimer": 3,
+          "dwellTimer": 60,
+          "sensitivity": 75,
+          "difference": 5,
+          "regions": [
+            {
+              "finished": true,
+              "coords": [
+                [
+                  0,
+                  100
+                ],
+                [
+                  0,
+                  0
+                ],
+                [
+                  100,
+                  0
+                ],
+                [
+                  100,
+                  100
+                ]
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "general": {
+      "atHome": false,
+      "exclude": [],
+      "rooms": [
+        "Standard"
+      ],
+      "automation": {
+        "active": false,
+        "atHome": false,
+        "exclude": [],
+        "startTime": "08:00",
+        "endTime": "17:00"
+      }
+    },
+    "notifications": {
+      "active": false,
+      "removeAfter": 3,
+      "alexa": {
+        "active": false,
+        "domain": "",
+        "serialNr": "",
+        "message": "",
+        "startTime": "00:00",
+        "endTime": "23:59",
+        "auth": {
+          "cookie": "",
+          "macDms": {
+            "device_private_key": "",
+            "adp_token": ""
+          }
+        },
+        "proxy": {
+          "port": 9494
+        }
+      },
+      "telegram": {
+        "active": false,
+        "token": "",
+        "chatID": "",
+        "message": ""
+      },
+      "webhook": {
+        "active": false
+      }
+    },
+    "recordings": {
+      "active": false,
+      "type": "Snapshot",
+      "timer": 10,
+      "path": "C:\\Users\\WEB\\Desktop\\camera.ui\\test\\camera.ui\\recordings",
+      "removeAfter": 7
+    },
+    "webpush": {
+      "publicKey": "BGfgDHIFILCTspCtcp_krpVTs6qdHP96t-tL6WaNWQmair2L6AbQ0oix1-ATCZN1Pv8thUwlmtIHAdyVhfVBAOk",
+      "privateKey": "ShGIp3uilQsPyGLAhM0OKe1vZyp7lBw0J53W3wjKHAY",
+      "subscription": false
+    },
+    "widgets": {
+      "options": {
+        "locked": false
+      },
+      "items": []
+    }
+  }
+}

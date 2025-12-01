@@ -1,0 +1,58 @@
+{
+  "logLevel": "info",
+  "port": 8081,
+  "atHomeSwitch": false,
+  "options": {
+    "videoProcessor": "C:\\Users\\WEB\\Desktop\\camera.ui\\node_modules\\ffmpeg-for-homebridge\\ffmpeg.exe"
+  },
+  "ssl": {
+    "active": false
+  },
+  "http": {
+    "active": false,
+    "port": 7272,
+    "localhttp": false
+  },
+  "smtp": {
+    "active": false,
+    "port": 2727,
+    "space_replace": "+"
+  },
+  "ftp": {
+    "active": false,
+    "useFile": false,
+    "port": 5050
+  },
+  "mqtt": {
+    "active": false,
+    "tls": false,
+    "port": 1883
+  },
+  "cameras": [
+    {
+      "name": "Tapo_C325WB_3599",
+      "motionTimeout": 15,
+      "recordOnMovement": null,
+      "prebuffering": null,
+      "videoConfig": {
+        "source": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
+        "stillImageSource": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
+        "stimeout": 0,
+        "audio": null,
+        "debug": null,
+        "subSource": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
+        "rtspTransport": "tcp",
+        "vcodec": "libx264",
+        "acodec": ""
+      },
+      "mqtt": {},
+      "smtp": {
+        "email": "Tapo_C325WB_3599"
+      },
+      "videoanalysis": {
+        "active": false
+      },
+      "prebufferLength": 4
+    }
+  ]
+}
