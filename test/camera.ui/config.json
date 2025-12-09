@@ -3,7 +3,7 @@
   "port": 8081,
   "atHomeSwitch": false,
   "options": {
-    "videoProcessor": "C:\\Users\\WEB\\Desktop\\camera.ui\\node_modules\\ffmpeg-for-homebridge\\ffmpeg.exe"
+    "videoProcessor": "./node_modules/ffmpeg-for-homebridge/ffmpeg.exe"
   },
   "ssl": {
     "active": false
@@ -48,6 +48,31 @@
       "mqtt": {},
       "smtp": {
         "email": "Tapo_C325WB_3599"
+      },
+      "videoanalysis": {
+        "active": false
+      },
+      "prebufferLength": 4
+    },
+    {
+      "name": "Demo",
+      "motionTimeout": 15,
+      "recordOnMovement": null,
+      "prebuffering": null,
+      "videoConfig": {
+        "source": "-re -stream_loop -1 -i C:\\Users\\WEB\\Desktop\\camera.ui\\test\\camera.ui\\videos\\demo1.mp4",
+        "stillImageSource": "-ss 0.2 -i file://C:\\\\Users\\\\WEB\\\\Desktop\\\\camera.ui\\\\test\\\\camera.ui\\\\videos\\\\demo1.mp4 -vframes 1",
+        "stimeout": 0,
+        "audio": null,
+        "debug": null,
+        "subSource": "-re -stream_loop -1 -i  C:\\Users\\WEB\\Desktop\\camera.ui\\test\\camera.ui\\videos\\demo1.mp4",
+        "rtspTransport": null,
+        "vcodec": "copy",
+        "acodec": null
+      },
+      "mqtt": {},
+      "smtp": {
+        "email": "Demo"
       },
       "videoanalysis": {
         "active": false
