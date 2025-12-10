@@ -9,32 +9,124 @@ import Database from '../../database.js';
 
 import CameraController from '../../../controller/camera/camera.controller.js';
 
+// Функция для извлечения и форматирования URL из source
+const extractAndFormatUrl = (source) => {
+  if (!source) return '';
+
+  const cleanSource = source.replace(/\u00A0/g, ' ');
+  const match = cleanSource.match(/-i\s+(\S+)/);
+
+  if (!match) return '';
+
+  const url = match[1];
+
+  // Проверяем, является ли это валидным URL
+  try {
+    const parsedUrl = new URL(url);
+    // Это сетевой источник (rtsp://, http:// и т.д.)
+    return `${parsedUrl.protocol}//${parsedUrl.hostname}${parsedUrl.port ? ':' + parsedUrl.port : ''}${parsedUrl.pathname}`;
+  } catch (error) {
+    // Не валидный URL - значит это локальный файл
+    if (url.startsWith('/')) {
+      // Unix путь
+      return `file://${url}`;
+    } else if (/^[A-Za-z]:[\\\/]/.test(url)) {
+      // Windows абсолютный путь
+      return `file:///${url.replace(/\\/g, '/')}`;
+    } else if (url.startsWith('./') || url.startsWith('../')) {
+      // Относительный путь
+      return `file:///${url.replace(/\\/g, '/')}`;
+    } else {
+      // Неизвестный формат
+      return url;
+    }
+  }
+};
+
+// Функция для подготовки videoConfig
+const prepareVideoConfig = (videoConfig) => {
+  if (!videoConfig) return videoConfig;
+
+  const config = { ...videoConfig };
+
+  // Убираем -re и -stream_loop из stillImageSource если они есть
+  if (config.stillImageSource) {
+    config.stillImageSource = config.stillImageSource
+      .replace(/-re\s+/g, '')
+      .replace(/-stream_loop\s+-1\s+/g, '')
+      .trim();
+  }
+
+  // Если stillImageSource не указан, создаем из source
+  if (!config.stillImageSource && config.source) {
+    config.stillImageSource = config.source
+      .replace(/-re\s+/g, '')
+      .replace(/-stream_loop\s+-1\s+/g, '')
+      .trim();
+  }
+
+  return config;
+};
+
+// Функция для добавления форматированного URL к камере
+const addFormattedUrlToCamera = (camera) => {
+  if (camera.videoConfig && camera.videoConfig.source) {
+    camera.url = extractAndFormatUrl(camera.videoConfig.source);
+  }
+  return camera;
+};
+
 export const list = async () => {
-  return await Database.interfaceDB.chain.get('cameras').cloneDeep().value();
+  const cameras = await Database.interfaceDB.chain.get('cameras').cloneDeep().value();
+
+  // Добавляем форматированные URL для каждой камеры
+  return cameras.map(camera => addFormattedUrlToCamera(camera));
 };
 
 export const findByName = async (name) => {
-  return await Database.interfaceDB.chain.get('cameras').find({ name: name }).cloneDeep().value();
+  const camera = await Database.interfaceDB.chain.get('cameras').find({ name: name }).cloneDeep().value();
+
+  if (camera) {
+    return addFormattedUrlToCamera(camera);
+  }
+
+  return camera;
 };
 
 export const getSettingsByName = async (name) => {
-  return await Database.interfaceDB.chain.get('settings').get('cameras').find({ name: name }).cloneDeep().value();
+  const settings = await Database.interfaceDB.chain.get('settings').get('cameras').find({ name: name }).cloneDeep().value();
+
+  if (settings) {
+    // Для настроек также добавляем URL если есть source
+    if (settings.videoConfig && settings.videoConfig.source) {
+      settings.url = extractAndFormatUrl(settings.videoConfig.source);
+    }
+  }
+
+  return settings;
 };
 
 export const createCamera = async (cameraData) => {
-  const camExist = ConfigService.ui.cameras.find((cam) => cam.name === cameraData.name);
+  // Подготовка cameraData перед сохранением
+  const preparedData = { ...cameraData };
+
+  if (preparedData.videoConfig) {
+    preparedData.videoConfig = prepareVideoConfig(preparedData.videoConfig);
+  }
+
+  const camExist = ConfigService.ui.cameras.find((cam) => cam.name === preparedData.name);
 
   if (!camExist) {
-    ConfigService.ui.cameras.push(cameraData);
+    ConfigService.ui.cameras.push(preparedData);
     ConfigService.writeToConfig('cameras', ConfigService.ui.cameras);
 
-    CameraController.createController(cameraData);
-    await CameraController.startController(cameraData.name);
+    CameraController.createController(preparedData);
+    await CameraController.startController(preparedData.name);
 
     await Database.writeConfigCamerasToDB();
-    Database.controller?.emit('addCamera', cameraData);
+    Database.controller?.emit('addCamera', preparedData);
 
-    return cameraData;
+    return preparedData;
   } else {
     return false;
   }
@@ -50,20 +142,30 @@ export const patchCamera = async (name, cameraData) => {
     throw new Error('Camera already exists in config.json');
   }
 
+  // Подготовка cameraData перед сохранением
+  const preparedData = { ...cameraData };
+
+  if (preparedData.videoConfig) {
+    preparedData.videoConfig = prepareVideoConfig(preparedData.videoConfig);
+  }
+
   ConfigService.ui.cameras = ConfigService.ui.cameras.map((camera) => {
-    if (camera.name === cameraData.name) {
-      camera = {
+    if (camera.name === name) {
+      return {
         ...camera,
-        ...cameraData,
+        ...preparedData,
       };
     }
 
     return camera;
   });
+
   ConfigService.writeToConfig('cameras', ConfigService.ui.cameras);
   await Database.writeConfigCamerasToDB();
 
-  return await Database.interfaceDB.chain.get('cameras').find({ name: name }).assign(cameraData).value();
+  const updatedCamera = await Database.interfaceDB.chain.get('cameras').find({ name: name }).assign(preparedData).value();
+
+  return addFormattedUrlToCamera(updatedCamera);
 };
 
 export const pingCamera = async (camera, timeout) => {

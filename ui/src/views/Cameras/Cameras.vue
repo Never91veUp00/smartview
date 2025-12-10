@@ -233,10 +233,21 @@ export default {
 
           camera.url = camera.videoConfig.source.replace(/\u00A0/g, ' ').split('-i ')[1];
 
-          if (!camera.url.startsWith('/')) {
-            const protocol = camera.url.split('://')[0];
-            const url = new URL(camera.url.replace(protocol, 'http'));
-            camera.url = `${protocol}://${url.hostname}:${url.port || 80}${url.pathname}`;
+          if (camera.url) {
+            // Проверяем, есть ли протокол в URL
+            if (camera.url.includes('://')) {
+              const protocol = camera.url.split('://')[0];
+              try {
+                const url = new URL(camera.url.replace(protocol, 'http'));
+                camera.url = `${protocol}://${url.hostname}:${url.port || 80}${url.pathname}`;
+              } catch (error) {
+                // Если не удалось разобрать URL, оставляем как есть
+                console.log('Invalid URL format:', camera.url);
+              }
+            } else {
+              // Локальный файл без протокола
+              camera.url = `file:///${camera.url.replace(/\\/g, '/')}`;
+            }
           }
         }
 

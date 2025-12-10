@@ -3,45 +3,21 @@
   "firstStart": false,
   "cameras": [
     {
-      "name": "Tapo_C325WB_3599",
-      "motionTimeout": 15,
-      "recordOnMovement": null,
-      "prebuffering": null,
-      "videoConfig": {
-        "source": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
-        "stillImageSource": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
-        "stimeout": 0,
-        "audio": null,
-        "debug": null,
-        "subSource": "-i rtsp://webcam:12345678@10.48.239.65:554/stream1",
-        "rtspTransport": "tcp",
-        "vcodec": "libx264",
-        "acodec": ""
-      },
-      "mqtt": {},
-      "smtp": {
-        "email": "Tapo_C325WB_3599"
-      },
-      "videoanalysis": {
-        "active": false
-      },
-      "prebufferLength": 4
-    },
-    {
       "name": "Demo",
       "motionTimeout": 15,
       "recordOnMovement": null,
       "prebuffering": null,
       "videoConfig": {
-        "source": "-re -stream_loop -1 -i C:\\Users\\WEB\\Desktop\\camera.ui\\test\\camera.ui\\videos\\demo1.mp4",
-        "stillImageSource": "-ss 0.2 -i file://C:\\\\Users\\\\WEB\\\\Desktop\\\\camera.ui\\\\test\\\\camera.ui\\\\videos\\\\demo1.mp4 -vframes 1",
+        "source": "-i ./test/camera.ui/videos/demo1.mp4",
+        "stillImageSource": "-i file:///C:/Users/WEB/Desktop/camera.ui/test/camera.ui/videos/demo1.mp4",
         "stimeout": 0,
         "audio": null,
         "debug": null,
-        "subSource": "-re -stream_loop -1 -i  C:\\Users\\WEB\\Desktop\\camera.ui\\test\\camera.ui\\videos\\demo1.mp4",
+        "subSource": "-i ./test/camera.ui/videos/demo1.mp4",
         "rtspTransport": null,
-        "vcodec": "copy",
-        "acodec": null
+        "vcodec": "libx264",
+        "acodec": null,
+        "readRate": true
       },
       "mqtt": {},
       "smtp": {
@@ -77,62 +53,6 @@
       "last_rekognition": ""
     },
     "cameras": [
-      {
-        "name": "Tapo_C325WB_3599",
-        "room": "Standard",
-        "resolution": "1280x720",
-        "pingTimeout": 1,
-        "streamTimeout": 60,
-        "audio": false,
-        "telegramType": "Snapshot",
-        "alexa": false,
-        "webhookUrl": "",
-        "mqttTopic": "camera.ui/motion",
-        "privacyMode": false,
-        "camview": {
-          "favourite": true,
-          "live": true,
-          "snapshotTimer": 60
-        },
-        "dashboard": {
-          "live": true,
-          "snapshotTimer": 60
-        },
-        "rekognition": {
-          "active": false,
-          "confidence": 90,
-          "labels": []
-        },
-        "videoanalysis": {
-          "forceCloseTimer": 3,
-          "dwellTimer": 60,
-          "sensitivity": 75,
-          "difference": 5,
-          "regions": [
-            {
-              "finished": true,
-              "coords": [
-                [
-                  0,
-                  100
-                ],
-                [
-                  0,
-                  0
-                ],
-                [
-                  100,
-                  0
-                ],
-                [
-                  100,
-                  100
-                ]
-              ]
-            }
-          ]
-        }
-      },
       {
         "name": "Demo",
         "room": "Standard",
